@@ -20,19 +20,19 @@ Match the specific code behavior in `ultimate_cluster_os.py` to the correspondin
 [Explain which line of code simulated this and why Workload D failed]
 
 Answer:
-โค้ดใช้ `os.path.exists(dataset_path)` เช็กไฟล์ก่อนเริ่มงาน Workload D ขอใช้ `secret_keys.txt` แต่ไฟล์นี้ไม่มีอยู่ จึงถูกปฏิเสธและไม่ได้รับทรัพยากรต่อ
+โค้ดใช้ os.path.exists(dataset_path) เช็กไฟล์ก่อนเริ่มงาน Workload D ขอใช้ secret_keys.txt แต่ไฟล์นี้ไม่มีอยู่ จึงถูกปฏิเสธและไม่ได้รับทรัพยากรต่อ
 
 - Memory Management (Labs 5/6):
 [Explain how the OS prevented Thrashing by using the `while` loop for RAM allocation]
 
 Answer:
-`while` loop คอยเช็ก `available_ram_gb` ก่อนจะแบ่ง RAM ให้แต่ละงาน ถ้ายังไม่พอ งานก็รอไปก่อน ไม่ฝืนรันจนใช้ RAM เกินและเกิด Thrashing
+while loop คอยเช็ก available_ram_gb ก่อนจะแบ่ง RAM ให้แต่ละงาน ถ้ายังไม่พอ งานก็รอไปก่อน ไม่ฝืนรันจนใช้ RAM เกินและเกิด Thrashing
 
 - Concurrency & Deadlocks (Labs 3/4):
 [Explain how the OS sorted the requested GPUs to avoid Circular Wait deadlocks]
 
 Answer:
-โค้ดใช้ `sorted(req_gpus)` ทำให้ทุกงานขอ GPU ตามลำดับเดียวกัน จึงลดโอกาสที่งานหนึ่งถือ GPU บางตัวไว้แล้วไปรอ GPU ของอีกงาน ซึ่งจะทำให้เกิด Circular Wait
+โค้ดใช้ sorted(req_gpus) ทำให้ทุกงานขอ GPU ตามลำดับเดียวกัน จึงลดโอกาสที่งานหนึ่งถือ GPU บางตัวไว้แล้วไปรอ GPU ของอีกงาน ซึ่งจะทำให้เกิด Circular Wait
 
 2. Hardware Utilization:
 

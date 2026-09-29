@@ -32,8 +32,8 @@ Answer:
 If you are training an AI model and your system begins to thrash because the RAM is full, lowering the `batch_size` in your Python code is a common solution. How does lowering the `batch_size` help the Operating System resolve the Thrashing problem?
 
 Answer:
-พอลด `batch_size` ข้อมูลที่ต้องเก็บในแต่ละรอบก็เล็กลง RAM หรือ VRAM เลยมีโอกาสพอมากขึ้น ระบบไม่ต้องย้ายข้อมูลไปมาระหว่าง RAM กับ Disk บ่อย ๆ ปัญหา Thrashing ก็ลดลง
+พอลด batch_size ข้อมูลที่ต้องเก็บในแต่ละรอบก็เล็กลง RAM หรือ VRAM เลยมีโอกาสพอมากขึ้น ระบบไม่ต้องย้ายข้อมูลไปมาระหว่าง RAM กับ Disk บ่อย ๆ ปัญหา Thrashing ก็ลดลง
 
 Additional Summary and Application:
 
-Virtual Memory ช่วยให้โปรแกรมยังทำงานต่อได้ตอน RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM เยอะ สำหรับงาน AI ฉันจะเริ่มจากลด `batch_size` ดูการใช้ RAM/VRAM และอาจใช้ Gradient Accumulation หรือ Gradient Checkpointing แทนการปล่อยให้ระบบ Swap ตลอดเวลา
+Virtual Memory ช่วยให้โปรแกรมยังทำงานต่อได้ตอน RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM เยอะ สำหรับงาน AI ฉันจะเริ่มจากลด batch_size ดูการใช้ RAM/VRAM และอาจใช้ Gradient Accumulation หรือ Gradient Checkpointing แทนการปล่อยให้ระบบ Swap ตลอดเวลา
