@@ -1,40 +1,34 @@
 ======================================================
 COE67-222 Operating Systems - Lab 06 Report
-Name: Taofix Yayueri
-Student ID: 67104000
+ชื่อ: Taofix Yayueri
+รหัสนักศึกษา: 67104000
 ======================================================
 
-Observed results from GitHub Codespaces
-- FIFO page faults: [fill after running]
-- LRU page faults: [fill after running]
-- Batch fits in RAM: [fill after running]
-- Simulated swap activity: [fill after running]
-- Measured slowdown: [fill after running]
+ผลการทดลองจาก GitHub Codespaces
+- FIFO Page Faults: 9
+- LRU Page Faults: 7
+- เวลาตอนข้อมูลอยู่ใน RAM: [กรอกค่าจาก Codespace]
+- เวลาในกรณีเกิดการเขียนอ่านแบบ Swap: [กรอกค่าจาก Codespace]
+- อัตราความช้าลง: [กรอกค่าจาก Codespace]
 
-1. FIFO vs LRU
+1. เปรียบเทียบ FIFO กับ LRU
 
-In the page_replacement.py script, why did LRU perform better than FIFO for the given reference string? Explain how LRU decides which page to evict.
+จากชุดข้อมูลในสคริปต์ FIFO เกิด Page Fault 9 ครั้ง ส่วน LRU เกิด 7 ครั้ง LRU จึงทำงานดีกว่า 2 ครั้ง เพราะมันดูว่าหน้าใดถูกใช้งานล่าสุดแล้วเก็บหน้านั้นไว้ เมื่อ RAM เต็ม LRU จะนำหน้าที่ไม่ได้ถูกใช้นานที่สุดออก
 
-Answer:
-[Write in your own words using the actual output.] 
+FIFO ดูเพียงลำดับที่หน้าเข้ามา จึงอาจนำหน้าที่กำลังจะถูกใช้อีกครั้งออกไป แม้หน้านั้นจะยังสำคัญกับโปรแกรมอยู่ ผลการทดลองจึงมี Page Fault มากกว่า
 
-2. Understanding Thrashing
+2. ความเข้าใจเรื่อง Thrashing
 
-Based on your observation of ai_thrashing.py, define Thrashing in your own words. Why was the processing time higher in the swapping scenario?
+ฉันเข้าใจว่า Thrashing คือภาวะที่ระบบเสียเวลาไปกับการย้ายข้อมูลระหว่าง RAM กับ Disk มากกว่าการประมวลผลจริง ในการทดลอง แบบที่ข้อมูลอยู่ใน RAM ทำงานเร็วกว่า เพราะเข้าถึงข้อมูลได้ทันที ส่วนแบบ Swap ต้องเปิด อ่าน และเขียนไฟล์ซ้ำหลายรอบ จึงใช้เวลามากกว่า
 
-Answer:
-[Write in your own words using the actual timing results.]
+เวลาที่วัดได้ขึ้นอยู่กับเครื่องและพื้นที่เก็บข้อมูล ดังนั้นต้องใช้ค่าที่รันได้จริงใน Codespace แทนค่าตัวอย่าง
 
-3. AI Engineering Decision
+3. การลด batch_size ช่วยอย่างไร
 
-If an AI training system starts to thrash because RAM is full, explain how lowering batch_size helps the operating system resolve the problem.
+การลด batch_size ทำให้ข้อมูลและค่าชั่วคราวที่ต้องเก็บในแต่ละรอบมีขนาดเล็กลง หน่วยความจำจึงมีโอกาสพอสำหรับโมเดลและข้อมูลที่กำลังใช้งานอยู่มากขึ้น เมื่อไม่ต้องย้ายหน้าออกไปที่ Disk บ่อย ๆ ปัญหา Thrashing ก็ลดลง แม้แต่ละรอบจะประมวลผลข้อมูลได้น้อยลงก็ตาม
 
-Answer:
-[Write in your own words.]
+4. สรุปและการประยุกต์ใช้
 
-4. Required summary and application
+Virtual Memory ช่วยให้โปรแกรมทำงานต่อได้เมื่อ RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM มาก จึงเป็นเพียงทางแก้เรื่องพื้นที่ ไม่ใช่ทางแก้เรื่องความเร็ว
 
-Explain how Virtual Memory helps when RAM is full, why LRU had fewer faults than FIFO in this experiment, how Thrashing affects AI model training time, and how an AI engineer would prevent or reduce it.
-
-Answer:
-[Write from your own observations.]
+สำหรับงาน AI ฉันจะเริ่มจากลด batch_size ตรวจสอบการใช้ RAM/VRAM และอาจใช้ Gradient Accumulation หรือ Gradient Checkpointing แทนการปล่อยให้ระบบ Swap ตลอดเวลา เพราะ Thrashing ทำให้เวลาฝึกโมเดลเพิ่มขึ้นมาก

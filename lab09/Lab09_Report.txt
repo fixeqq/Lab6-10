@@ -1,39 +1,27 @@
 ======================================================
 COE67-222 Operating Systems - Lab 09 Report
-Name: Taofix Yayueri
-Student ID: 67104000
+ชื่อ: Taofix Yayueri
+รหัสนักศึกษา: 67104000
 ======================================================
 
-Observed results from GitHub Codespaces
-- Inode number and metadata: [fill after running]
-- Default permissions: [fill after running]
-- os_security.py result: [fill after running]
-- ai_weight_protection.py result: [fill after running]
+ผลที่ต้องบันทึกจาก GitHub Codespaces
+- Inode Number และ Metadata: [กรอกค่าจาก Codespace]
+- Default permissions: [กรอกค่าจาก Codespace]
+- os_security.py: ควรแสดงว่าเขียนไฟล์ไม่ได้หลังใช้ 0o400
+- ai_weight_protection.py: ควรแสดงว่า Kernel ปฏิเสธการเขียนหลังใช้ 0o444
 
-1. Inodes and Metadata
+1. Inodes และ Metadata
 
-If the file is renamed with the Linux mv command, will its Inode Number change? Explain why.
-
-Answer:
-[Write in your own words.]
+ถ้าใช้คำสั่ง mv เปลี่ยนชื่อไฟล์ภายใน File System เดียวกัน Inode Number จะไม่เปลี่ยน เพราะการ Rename เปลี่ยนชื่อที่ชี้ไปยังไฟล์ แต่ไม่ได้สร้างข้อมูลไฟล์ใหม่ ส่วนรายละเอียดอย่างขนาด เวลา และสิทธิ์จะยังอยู่กับ Inode เดิม
 
 2. POSIX Permissions
 
-If the Owner has Read/Write/Execute, the Group has Read/Execute, and Others have no access, what three-digit octal value should be passed to os.chmod()?
+ค่าที่ใช้คือ 750 เพราะ Owner ได้ Read/Write/Execute เท่ากับ 7, Group ได้ Read/Execute เท่ากับ 5 และ Others ไม่มีสิทธิ์เท่ากับ 0
 
-Answer:
-[Write in your own words and include the octal value.]
+3. การป้องกัน Model Weights
 
-3. AI Context
+OS-level permission ป้องกันตั้งแต่ตอนโปรเซสขอเปิดไฟล์ ไม่ได้ขึ้นอยู่กับว่าโปรแกรมเขียน try-except ไว้ดีแค่ไหน หากใช้ os.chmod(0o444) ไฟล์จะอ่านได้แต่เขียนไม่ได้ตามสิทธิ์ที่ Kernel บังคับใช้ โปรแกรมที่เปิดไฟล์ในโหมดเขียนจึงถูกปฏิเสธก่อนแก้ข้อมูลจริง
 
-Why is it safer to use OS-level file permissions, such as os.chmod(0o444), to protect production model weights instead of relying only on application logic or try-except blocks?
+4. สรุปและการประยุกต์ใช้
 
-Answer:
-[Write in your own words.]
-
-4. Required summary and application
-
-Summarize how permissions and Inodes support file access control, and explain how system calls such as chmod and, where authorized, chown can protect model weights from unauthorized reading or modification.
-
-Answer:
-[Write from your own observations.]
+Inode เก็บ Metadata ของไฟล์ เช่น เจ้าของ ขนาด และตำแหน่งข้อมูล ส่วน Permission แบ่งสิทธิ์เป็น Owner, Group และ Others สำหรับ Model Weights ฉันจะตั้งไฟล์เป็น Read-only ด้วย os.chmod และกำหนดเจ้าของหรือกลุ่มด้วย chown เมื่อมีสิทธิ์เพียงพอ วิธีนี้ช่วยกันโปรเซสที่ไม่ควรแก้ไขไฟล์ได้ดีกว่าการตรวจสอบในโค้ดเพียงอย่างเดียว

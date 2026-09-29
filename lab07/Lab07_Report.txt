@@ -1,45 +1,29 @@
 ======================================================
 COE67-222 Operating Systems - Lab 07 Report
-Name: Taofix Yayueri
-Student ID: 67104000
+ชื่อ: Taofix Yayueri
+รหัสนักศึกษา: 67104000
 ======================================================
 
-Observed results from GitHub Codespaces
-- FCFS average waiting time: [fill after running]
-- FCFS average turnaround time: [fill after running]
-- Round Robin average waiting time: [fill after running]
-- Round Robin average turnaround time: [fill after running]
-- AI inference observation: [fill after running]
+ผลจากชุดงานในสคริปต์
+- FCFS Average Waiting Time: 7.33 time units
+- FCFS Average Turnaround Time: 12.33 time units
+- Round Robin Average Waiting Time: 4.33 time units
+- Round Robin Average Turnaround Time: 10.00 time units
 
-1. The Convoy Effect
+1. Convoy Effect
 
-In the FCFS output of cpu_scheduler.py, what is the Convoy Effect? How did P1 affect the waiting times of P2 and P3?
+ใน FCFS P1 ใช้ CPU นาน 10 หน่วยเวลา จึงทำให้ P2 ต้องรอจนถึงเวลา 10 และ P3 ต้องรอจนถึงเวลา 12 แม้ทั้งสองงานจะสั้นมากก็ตาม อาการที่งานสั้นหลายงานต้องต่อแถวยาวหลังงานใหญ่แบบนี้คือ Convoy Effect
 
-Answer:
-[Write in your own words using the actual output.]
+2. การเลือก Time Quantum
 
-2. Choosing the Time Quantum
+ถ้า Time Quantum ใหญ่มาก เช่น 100 งานแรกจะได้ใช้ CPU จนเกือบจบก่อนส่งต่อ งานจึงมีพฤติกรรมใกล้เคียง FCFS
 
-What happens if the Time Quantum is extremely large, such as 100? Which algorithm does Round Robin begin to resemble?
+ถ้า Time Quantum เล็กมาก เช่น 0.0001 ระบบจะสลับงานถี่เกินไป เวลาและ CPU ที่ใช้ในการ Context Switch จะมีสัดส่วนสูง ทำให้เวลาส่วนหนึ่งไม่ได้ใช้ประมวลผลงานจริง
 
-Answer:
-[Write in your own words.]
+3. การประยุกต์กับ AI Inference
 
-What happens if the Time Quantum is extremely small, such as 0.0001? Explain the effect of context-switching overhead.
+ในแบบ Round Robin เซิร์ฟเวอร์ให้แต่ละคำขอสร้าง Token ทีละช่วงสั้น ๆ แล้วนำงานที่ยังไม่เสร็จกลับเข้าคิว ดังนั้นคำขอสั้นของ User B ไม่ต้องรอให้บทความของ User A สร้างครบทั้งหมด User B จึงได้รับ Token แรกเร็วขึ้นและรู้สึกว่าระบบตอบสนองดีขึ้น ค่า TTFT ก็ลดลง
 
-Answer:
-[Write in your own words.]
+4. สรุปและการประยุกต์ใช้
 
-3. AI Context
-
-Explain why iteration-level Round Robin prevents long user queries from starving short queries and how it improves perceived latency, especially Time To First Token (TTFT).
-
-Answer:
-[Write in your own words using the AI scheduler output.]
-
-4. Required summary and application
-
-Compare FCFS and Round Robin, describe the Convoy Effect you observed, and explain why a Time Quantum gives a busy AI Inference API a fairer user experience.
-
-Answer:
-[Write from your own observations.]
+FCFS เข้าใจง่าย แต่ถ้างานแรกใหญ่ งานเล็กที่มาทีหลังจะรอนาน Round Robin แบ่งเวลาให้ทุกงานเป็นช่วง ๆ จึงเหมาะกับ AI Inference API ที่มีผู้ใช้พร้อมกันจำนวนมากกว่า เพราะลดการถูกงานยาวงานเดียวขวางคิวทั้งหมด

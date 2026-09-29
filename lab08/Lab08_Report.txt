@@ -1,41 +1,29 @@
 ======================================================
 COE67-222 Operating Systems - Lab 08 Report
-Name: Taofix Yayueri
-Student ID: 67104000
+ชื่อ: Taofix Yayueri
+รหัสนักศึกษา: 67104000
 ======================================================
 
-Observed results from GitHub Codespaces
-- FCFS disk path: [fill after running]
-- FCFS total head movement: [fill after running]
-- SCAN disk path: [fill after running]
-- SCAN total head movement: [fill after running]
-- Random small-file time: [fill after running]
-- Sequential packed-file time: [fill after running]
+ผลจากชุดคำขอในสคริปต์
+- FCFS Path: 53 -> 98 -> 183 -> 37 -> 122 -> 14 -> 124 -> 65 -> 67
+- FCFS Total Head Movement: 640 cylinders
+- SCAN Path: 53 -> 65 -> 67 -> 98 -> 122 -> 124 -> 183 -> 199 -> 37 -> 14
+- SCAN Total Head Movement: 331 cylinders
+- Random small-file time: [กรอกค่าจาก Codespace]
+- Sequential packed-file time: [กรอกค่าจาก Codespace]
 
 1. Disk Scheduling
 
-Why did SCAN produce a lower Total Head Movement than FCFS? Explain the Elevator behavior using the output of disk_scheduler.py.
+FCFS อ่านคำขอตามลำดับที่เข้ามา ทำให้หัวอ่านกระโดดไปมาระหว่างตำแหน่งไกล ๆ จึงเคลื่อนที่รวม 640 cylinders ส่วน SCAN เรียงคำขอแล้วเคลื่อนที่ขึ้นไปทางเดียวจนถึงปลาย Disk ก่อนย้อนกลับ ทำให้ระยะทางรวมเหลือ 331 cylinders
 
-Answer:
-[Write in your own words using the actual paths and totals.]
+2. I/O Bound
 
-2. I/O Bound Concept
+I/O Bound หมายถึงงานต้องรอการอ่านหรือเขียนข้อมูลเป็นหลัก CPU จึงไม่ได้ทำงานเต็ม 100% แต่มีช่วงว่างรอ Disk หรืออุปกรณ์ I/O เมื่อข้อมูลมาถึงจึงกลับมาประมวลผลต่อ
 
-If a task is I/O Bound, what does that mean for the CPU? Is the CPU at 100% usage or mostly idle? Explain why.
+3. การประยุกต์กับ Dataset
 
-Answer:
-[Write in your own words.]
+ไฟล์ .jpg จำนวนมากทำให้ OS ต้องเปิดไฟล์ ตรวจ Metadata ตรวจสิทธิ์ และปิดไฟล์ซ้ำเป็นล้านครั้ง การเข้าถึงจึงมี Overhead สูงและ GPU อาจว่างรอข้อมูล หากรวมไฟล์เป็นรูปแบบต่อเนื่อง เช่น TFRecord, WebDataset หรือ HDF5 ระบบจะอ่านข้อมูลเป็นลำดับได้ง่ายกว่าและส่งข้อมูลให้ GPU ได้ต่อเนื่องขึ้น
 
-3. AI Industry Connection
+4. สรุปและการประยุกต์ใช้
 
-Explain why storing 1,000,000 images as separate .jpg files causes more I/O overhead and GPU starvation than packing them into a sequential format such as TFRecord, WebDataset, or HDF5.
-
-Answer:
-[Write in your own words.]
-
-4. Required summary and application
-
-Explain the bottleneck difference between Random Access and Sequential Access, and explain how I/O Bound data pipelines can leave a GPU idle while the OS and storage handle many file operations.
-
-Answer:
-[Write from your own observations.]
+Random Access มีคอขวดจากการกระโดดไปยังตำแหน่งต่าง ๆ และการจัดการไฟล์จำนวนมาก ส่วน Sequential Access อ่านข้อมูลต่อเนื่องจึงลดงานของ OS ได้มากกว่า ใน Data Pipeline ขนาดใหญ่ ถ้า I/O ช้า GPU จะว่างงาน แม้ตัว GPU จะมีความสามารถเหลืออยู่ก็ตาม
