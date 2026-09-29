@@ -1,0 +1,39 @@
+======================================================
+COE67-222 Operating Systems - Lab 09 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed results from GitHub Codespaces
+- Inode number and metadata: [fill after running]
+- Default permissions: [fill after running]
+- os_security.py result: [fill after running]
+- ai_weight_protection.py result: [fill after running]
+
+1. Inodes and Metadata
+
+If the file is renamed with the Linux mv command, will its Inode Number change? Explain why.
+
+Answer:
+[Write in your own words.]
+
+2. POSIX Permissions
+
+If the Owner has Read/Write/Execute, the Group has Read/Execute, and Others have no access, what three-digit octal value should be passed to os.chmod()?
+
+Answer:
+[Write in your own words and include the octal value.]
+
+3. AI Context
+
+Why is it safer to use OS-level file permissions, such as os.chmod(0o444), to protect production model weights instead of relying only on application logic or try-except blocks?
+
+Answer:
+[Write in your own words.]
+
+4. Required summary and application
+
+Summarize how permissions and Inodes support file access control, and explain how system calls such as chmod and, where authorized, chown can protect model weights from unauthorized reading or modification.
+
+Answer:
+[Write from your own observations.]

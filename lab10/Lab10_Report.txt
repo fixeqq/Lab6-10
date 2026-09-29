@@ -1,0 +1,59 @@
+======================================================
+COE67-222 Operating Systems - Lab 10 Report (Final)
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed results from GitHub Codespaces
+- Workload A observation: [fill after running]
+- Workload B observation: [fill after running]
+- Workload C observation: [fill after running]
+- Workload D observation: [fill after running]
+- Live Dashboard observations: [fill after running]
+
+1. The Role of the Operating System
+
+File System Security (Lab 9)
+Explain which code checks the dataset path and why Workload D failed.
+
+Answer:
+[Write in your own words using the output.]
+
+Memory Management (Labs 5 and 6)
+Explain how the while loop waits for enough RAM and helps prevent Thrashing.
+
+Answer:
+[Write in your own words using the dashboard output.]
+
+Concurrency and Deadlock Avoidance (Labs 3 and 4)
+Explain how sorting the requested GPU IDs helps avoid Circular Wait.
+
+Answer:
+[Write in your own words.]
+
+CPU Scheduling Queue (Lab 7)
+Explain how the job queue and worker threads allow different workloads to be scheduled.
+
+Answer:
+[Write in your own words.]
+
+2. Hardware Utilization
+
+Explain how the system ran Training, Preprocessing, and Inference at the same time without exceeding its RAM or GPU resources. Why did the workloads not block each other completely?
+
+Answer:
+[Write from the Live Dashboard output.]
+
+3. Course Reflection
+
+Explain how understanding process queues, RAM and Virtual Memory limits, Deadlock avoidance, CPU scheduling, and file systems gives an MLOps Engineer an advantage over someone who only writes basic Python or PyTorch scripts.
+
+Answer:
+[Write in your own words.]
+
+4. Required capstone summary
+
+Explain how Memory Allocation, File System Security, Deadlock Avoidance, and the CPU Scheduling Queue work together so Training, Preprocessing, and Inference can run smoothly.
+
+Answer:
+[Write from your own experiment.]

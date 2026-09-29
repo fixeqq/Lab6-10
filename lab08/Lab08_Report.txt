@@ -1,0 +1,41 @@
+======================================================
+COE67-222 Operating Systems - Lab 08 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed results from GitHub Codespaces
+- FCFS disk path: [fill after running]
+- FCFS total head movement: [fill after running]
+- SCAN disk path: [fill after running]
+- SCAN total head movement: [fill after running]
+- Random small-file time: [fill after running]
+- Sequential packed-file time: [fill after running]
+
+1. Disk Scheduling
+
+Why did SCAN produce a lower Total Head Movement than FCFS? Explain the Elevator behavior using the output of disk_scheduler.py.
+
+Answer:
+[Write in your own words using the actual paths and totals.]
+
+2. I/O Bound Concept
+
+If a task is I/O Bound, what does that mean for the CPU? Is the CPU at 100% usage or mostly idle? Explain why.
+
+Answer:
+[Write in your own words.]
+
+3. AI Industry Connection
+
+Explain why storing 1,000,000 images as separate .jpg files causes more I/O overhead and GPU starvation than packing them into a sequential format such as TFRecord, WebDataset, or HDF5.
+
+Answer:
+[Write in your own words.]
+
+4. Required summary and application
+
+Explain the bottleneck difference between Random Access and Sequential Access, and explain how I/O Bound data pipelines can leave a GPU idle while the OS and storage handle many file operations.
+
+Answer:
+[Write from your own observations.]

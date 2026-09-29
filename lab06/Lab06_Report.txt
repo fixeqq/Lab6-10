@@ -1,0 +1,40 @@
+======================================================
+COE67-222 Operating Systems - Lab 06 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed results from GitHub Codespaces
+- FIFO page faults: [fill after running]
+- LRU page faults: [fill after running]
+- Batch fits in RAM: [fill after running]
+- Simulated swap activity: [fill after running]
+- Measured slowdown: [fill after running]
+
+1. FIFO vs LRU
+
+In the page_replacement.py script, why did LRU perform better than FIFO for the given reference string? Explain how LRU decides which page to evict.
+
+Answer:
+[Write in your own words using the actual output.] 
+
+2. Understanding Thrashing
+
+Based on your observation of ai_thrashing.py, define Thrashing in your own words. Why was the processing time higher in the swapping scenario?
+
+Answer:
+[Write in your own words using the actual timing results.]
+
+3. AI Engineering Decision
+
+If an AI training system starts to thrash because RAM is full, explain how lowering batch_size helps the operating system resolve the problem.
+
+Answer:
+[Write in your own words.]
+
+4. Required summary and application
+
+Explain how Virtual Memory helps when RAM is full, why LRU had fewer faults than FIFO in this experiment, how Thrashing affects AI model training time, and how an AI engineer would prevent or reduce it.
+
+Answer:
+[Write from your own observations.]
