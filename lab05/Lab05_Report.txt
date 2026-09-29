@@ -1,0 +1,42 @@
+======================================================
+COE67-222 Operating Systems - Lab 05 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed output from GitHub Codespaces
+- memory_allocation.py before/after RAM usage: [fill in the measured output]
+- page_table_sim.py results: [fill in or check against the output]
+- ai_mmap_model.py RAM usage and accessed value: [fill in the measured output]
+
+1. Address Translation Math (Phase 3):
+
+Assume an OS has a PAGE_SIZE of 4096 bytes.
+If an AI model requests data at Logical Address 10000, calculate:
+- The Page Number: [____]
+- The Offset: [____]
+(Show your calculation steps briefly).
+
+Answer:
+Page Number = 10000 // 4096 = 2
+Offset = 10000 % 4096 = 1808
+
+2. Physical Memory Fragmentation:
+
+In our `page_table_sim.py`, Page 0 was stored in Frame 12, and Page 1 was in Frame 45.
+
+Why does the OS store continuous logical data in scattered/fragmented physical frames instead of putting them right next to each other? What problem does this solve?
+
+Answer:
+เพราะ RAM ที่ว่างอาจกระจายอยู่หลายตำแหน่ง OS จึงไม่จำเป็นต้องหาพื้นที่ว่างติดกันก้อนใหญ่ แค่เก็บแต่ละ Page ไว้ใน Frame ที่ว่าง แล้วใช้ Page Table ช่วยแปลงตำแหน่ง วิธีนี้ช่วยลดปัญหาที่โปรแกรมต้องการหน่วยความจำก้อนใหญ่ แต่ RAM ว่างเป็นชิ้นเล็ก ๆ กระจายกันอยู่
+
+3. The AI Context (mmap):
+
+In Phase 4, we mapped a 50MB file to memory, but the physical RAM usage did not increase significantly. Explain how the OS Virtual Memory and Page Table achieve this, and what actually happens at the OS level when index 25,000,000 is accessed.
+
+Answer:
+ตอนใช้ mmap โปรแกรมจะเห็นไฟล์เหมือนอยู่ในหน่วยความจำ แต่ OS ยังไม่จำเป็นต้องเอาข้อมูลทั้ง 50MB เข้า RAM ทันที Page Table จะเชื่อมตำแหน่งเสมือนไปยังไฟล์บน Disk เมื่อโปรแกรมอ่าน index 25,000,000 จึงเกิด Page Fault แล้ว OS ค่อยโหลด Page ที่มีข้อมูลตำแหน่งนั้นเข้า Physical Frame ที่ว่าง จากนั้นโปรแกรมจึงอ่านค่าได้
+
+Additional Summary and Application:
+
+จาก Lab นี้ฉันเห็นว่า Logical Address กับ Physical Address ไม่ใช่ตำแหน่งเดียวกัน OS ใช้ Paging และ Page Table ซ่อนความซับซ้อนของ RAM ที่กระจัดกระจาย ส่วน mmap ช่วยให้โปรแกรมเปิดใช้โมเดลใหญ่กว่าขนาด RAM ได้ โดยโหลดเฉพาะส่วนที่กำลังถูกเรียกใช้
