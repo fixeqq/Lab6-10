@@ -1,42 +1,54 @@
 ======================================================
 COE67-222 Operating Systems - Lab 10 Report (Final)
-ชื่อ: Taofix Yayueri
-รหัสนักศึกษา: 67104000
+Name: Taofix Yayueri
+Student ID: 67104000
 ======================================================
 
-สิ่งที่ต้องตรวจสอบจาก Live Dashboard
-- Workload A: ใช้ RAM 40 GB และ GPU 0, 1, 2
-- Workload B: ใช้ RAM 16 GB และทำงานบน CPU โดยไม่ใช้ GPU
-- Workload C: ใช้ RAM 2 GB และ GPU 3
-- Workload D: ถูกปฏิเสธเพราะไม่มีไฟล์ secret_keys.txt
-- Dashboard: [เพิ่มภาพหน้าจอหรือบันทึกผลจาก Codespace]
+Observed output from the Live Dashboard
+- Workload A: 40 GB RAM and GPUs 0, 1, 2
+- Workload B: 16 GB RAM and CPU only
+- Workload C: 2 GB RAM and GPU 3
+- Workload D: rejected because `secret_keys.txt` was not found
+- Dashboard screenshot: [add after running in Codespaces]
 
-1. บทบาทของระบบปฏิบัติการ
+1. The Role of the Operating System:
 
-File System Security
+In this mini-project, our Python script simulated the major responsibilities of an Operating System.
+Match the specific code behavior in `ultimate_cluster_os.py` to the corresponding OS concept you learned throughout the semester:
 
-ใน _execute_job ระบบตรวจด้วย os.path.exists(dataset_path) ก่อนเริ่มงาน Workload D ขอใช้ไฟล์ secret_keys.txt ซึ่งไม่มีอยู่ จึงถูกปฏิเสธและไม่ถูกจัดสรรทรัพยากร
+- File System & Permissions (Lab 9):
+[Explain which line of code simulated this and why Workload D failed]
 
-Memory Management
+Answer:
+โค้ดใช้ `os.path.exists(dataset_path)` ตรวจไฟล์ก่อนเริ่มงาน Workload D ขอใช้ `secret_keys.txt` ซึ่งไม่มีอยู่ในระบบ จึงถูกปฏิเสธและไม่ได้รับทรัพยากรต่อ
 
-โค้ดใช้ while loop ตรวจ available_ram_gb และจะหัก RAM ออกเมื่อมีพอเท่านั้น ถ้า RAM ยังไม่พอ งานจะรอแทนการฝืนรัน วิธีนี้ช่วยไม่ให้หลายงานใช้ RAM เกินจริงจนเกิด Thrashing
+- Memory Management (Labs 5/6):
+[Explain how the OS prevented Thrashing by using the `while` loop for RAM allocation]
 
-Deadlock Avoidance
+Answer:
+`while` loop ตรวจ `available_ram_gb` ก่อนหัก RAM ให้แต่ละงาน ถ้ายังมีไม่พอ งานจะรอแทนการฝืนรัน วิธีนี้ช่วยไม่ให้ใช้ RAM เกินจริงจนเกิด Thrashing
 
-ก่อนล็อก GPU โค้ดเรียงหมายเลขด้วย sorted(req_gpus) ทุกงานจึงขอทรัพยากรตามลำดับเดียวกัน ลดโอกาสเกิด Circular Wait ที่ทำให้แต่ละงานรอกันเอง
+- Concurrency & Deadlocks (Labs 3/4):
+[Explain how the OS sorted the requested GPUs to avoid Circular Wait deadlocks]
 
-CPU Scheduling Queue
+Answer:
+โค้ดใช้ `sorted(req_gpus)` ทำให้ทุกงานขอ GPU ตามลำดับเดียวกัน ลดโอกาสที่แต่ละงานจะถือ GPU บางตัวแล้วรอ GPU ของอีกงาน ซึ่งเป็นสาเหตุของ Circular Wait
 
-งานทุกงานถูกส่งเข้า job_queue แล้ว Scheduler ดึงไปสร้าง Worker สำหรับจัดการทรัพยากร งานจึงไม่ต้องทำงานทั้งหมดในโปรเซสเดียวและสามารถใช้ทรัพยากรที่ไม่ชนกันพร้อมกันได้
+2. Hardware Utilization:
 
-2. Hardware Utilization
+Look at the output of your Live Dashboard. Explain how the OS successfully ran Workload A (LLaMA Training), Workload B (Preprocessing), and Workload C (Inference) AT THE SAME TIME without crashing. Why didn't they block each other?
 
-Workload A ใช้ GPU 0, 1, 2 เหลือ GPU 3 ไว้ให้ Workload C ส่วน Workload B ไม่ใช้ GPU จึงทำงานบน CPU ควบคู่กับ A ได้ แต่ละงานใช้ RAM ตามจำนวนที่ขอและมี Lock ควบคุม GPU ทำให้ระบบไม่จัดสรรทรัพยากรเกินจำนวนที่มี งานจึงไม่บล็อกกันทั้งหมด
+Answer:
+Workload A ใช้ GPU 0, 1, 2 และ RAM 40 GB ส่วน Workload B ไม่ใช้ GPU จึงทำงานบน CPU ควบคู่กับ A ได้ ขณะที่ Workload C ใช้ GPU 3 ที่ยังว่างและ RAM 2 GB แต่ละงานใช้ทรัพยากรคนละส่วนหรืออยู่ภายใต้ Lock จึงไม่แย่งทรัพยากรกันจนระบบล้ม
 
-3. บทสรุปรายวิชา
+3. Course Reflection (AI Engineering Context):
 
-ความรู้เรื่อง OS ทำให้ฉันมองเห็นข้อจำกัดที่เกิดขึ้นตอนระบบรันจริง ไม่ใช่แค่เขียนโมเดลให้ทำงานได้ เช่น รู้ว่างานจะติดที่ RAM, คิว CPU, Disk หรือสิทธิ์ไฟล์ตรงไหน ความเข้าใจนี้ช่วยให้ออกแบบระบบ AI และ MLOps ที่ใช้ทรัพยากรคุ้มค่า แก้ปัญหาได้เร็ว และไม่ทำให้โมเดลหรือข้อมูลสำคัญเสียหาย
+You are now applying for a role as a Machine Learning Operations (MLOps) Engineer.
+Write a short paragraph explaining how understanding Operating Systems (Process queues, RAM/Virtual Memory limits, Deadlock avoidance, File systems) gives you an advantage over a programmer who only knows how to write basic Python/PyTorch scripts.
 
-4. สรุปภาพรวมของ Capstone
+Answer:
+ความรู้เรื่อง OS ทำให้ฉันมองเห็นปัญหาที่เกิดตอนระบบรันจริง เช่น งานติดที่ RAM, CPU Queue, Disk หรือสิทธิ์ไฟล์ จึงวางระบบ AI/MLOps ให้ใช้ทรัพยากรคุ้มค่า แก้ปัญหาได้เร็ว และป้องกันข้อมูลหรือ Model Weights เสียหายได้ดีกว่าการเขียนโค้ดให้ทำงานได้เพียงอย่างเดียว
 
-การจัดสรร Memory ทำให้งานไม่ใช้ RAM เกิน File System Security กรองไฟล์ที่เข้าถึงไม่ได้ การเรียงลำดับการขอ GPU ช่วยลด Deadlock และ Job Queue ช่วยจัดลำดับงาน ทั้งสี่ส่วนทำให้ Training, Preprocessing และ Inference ทำงานพร้อมกันได้โดยไม่แย่งทรัพยากรกันจนระบบล้ม
+Additional Capstone Summary:
+
+Memory Allocation ป้องกันการใช้ RAM เกิน File System Security กรองไฟล์ที่เข้าถึงไม่ได้ การเรียงลำดับการขอ GPU ช่วยลด Deadlock และ Job Queue ช่วยจัดงานให้เหมาะกับทรัพยากร ทั้งสี่ส่วนทำให้ Training, Preprocessing และ Inference ทำงานพร้อมกันได้อย่างราบรื่น

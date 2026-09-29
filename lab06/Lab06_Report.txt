@@ -1,34 +1,39 @@
 ======================================================
 COE67-222 Operating Systems - Lab 06 Report
-ชื่อ: Taofix Yayueri
-รหัสนักศึกษา: 67104000
+Name: Taofix Yayueri
+Student ID: 67104000
 ======================================================
 
-ผลการทดลองจาก GitHub Codespaces
-- FIFO Page Faults: 9
-- LRU Page Faults: 7
-- เวลาตอนข้อมูลอยู่ใน RAM: [กรอกค่าจาก Codespace]
-- เวลาในกรณีเกิดการเขียนอ่านแบบ Swap: [กรอกค่าจาก Codespace]
-- อัตราความช้าลง: [กรอกค่าจาก Codespace]
+Observed output from GitHub Codespaces
+- FIFO page faults: 9
+- LRU page faults: 7
+- Batch fits in RAM: [fill in the measured time]
+- OS is swapping to disk: [fill in the measured time]
+- Measured slowdown: [fill in the measured ratio]
 
-1. เปรียบเทียบ FIFO กับ LRU
+1. FIFO vs LRU (Phase 2):
 
-จากชุดข้อมูลในสคริปต์ FIFO เกิด Page Fault 9 ครั้ง ส่วน LRU เกิด 7 ครั้ง LRU จึงทำงานดีกว่า 2 ครั้ง เพราะมันดูว่าหน้าใดถูกใช้งานล่าสุดแล้วเก็บหน้านั้นไว้ เมื่อ RAM เต็ม LRU จะนำหน้าที่ไม่ได้ถูกใช้นานที่สุดออก
+In the `page_replacement.py` script, why did the LRU algorithm perform better (have fewer page faults) than the FIFO algorithm for the given reference string? Explain how LRU decides which page to evict.
 
-FIFO ดูเพียงลำดับที่หน้าเข้ามา จึงอาจนำหน้าที่กำลังจะถูกใช้อีกครั้งออกไป แม้หน้านั้นจะยังสำคัญกับโปรแกรมอยู่ ผลการทดลองจึงมี Page Fault มากกว่า
+Answer:
+จากผลการทดลอง FIFO เกิด Page Fault 9 ครั้ง ส่วน LRU เกิด 7 ครั้ง LRU จึงดีกว่า 2 ครั้ง เพราะมันดูประวัติการใช้งานล่าสุด เมื่อ RAM เต็ม LRU จะนำหน้าที่ไม่ได้ถูกใช้นานที่สุดออก ทำให้หน้าที่เพิ่งถูกใช้งานยังอยู่ใน RAM ต่อ
 
-2. ความเข้าใจเรื่อง Thrashing
+FIFO ดูแค่ว่าหน้าไหนเข้ามาก่อน จึงอาจนำหน้าที่กำลังจะถูกใช้อีกครั้งออกไป แม้หน้านั้นจะยังมีประโยชน์กับโปรแกรมอยู่
 
-ฉันเข้าใจว่า Thrashing คือภาวะที่ระบบเสียเวลาไปกับการย้ายข้อมูลระหว่าง RAM กับ Disk มากกว่าการประมวลผลจริง ในการทดลอง แบบที่ข้อมูลอยู่ใน RAM ทำงานเร็วกว่า เพราะเข้าถึงข้อมูลได้ทันที ส่วนแบบ Swap ต้องเปิด อ่าน และเขียนไฟล์ซ้ำหลายรอบ จึงใช้เวลามากกว่า
+2. Understanding Thrashing (Phase 3):
 
-เวลาที่วัดได้ขึ้นอยู่กับเครื่องและพื้นที่เก็บข้อมูล ดังนั้นต้องใช้ค่าที่รันได้จริงใน Codespace แทนค่าตัวอย่าง
+Based on your observation of `ai_thrashing.py`, define "Thrashing" in your own words. Why is the processing time significantly higher in Scenario 2?
 
-3. การลด batch_size ช่วยอย่างไร
+Answer:
+ฉันเข้าใจว่า Thrashing คือภาวะที่ระบบเสียเวลาไปกับการย้ายข้อมูลระหว่าง RAM กับ Disk มากกว่าการประมวลผลจริง Scenario 2 ต้องเปิด อ่าน และเขียนไฟล์ซ้ำหลายรอบ ขณะที่ Scenario 1 เข้าถึงข้อมูลใน RAM โดยตรง จึงทำให้ Scenario 2 ใช้เวลามากกว่า
 
-การลด batch_size ทำให้ข้อมูลและค่าชั่วคราวที่ต้องเก็บในแต่ละรอบมีขนาดเล็กลง หน่วยความจำจึงมีโอกาสพอสำหรับโมเดลและข้อมูลที่กำลังใช้งานอยู่มากขึ้น เมื่อไม่ต้องย้ายหน้าออกไปที่ Disk บ่อย ๆ ปัญหา Thrashing ก็ลดลง แม้แต่ละรอบจะประมวลผลข้อมูลได้น้อยลงก็ตาม
+3. AI Engineering Decision:
 
-4. สรุปและการประยุกต์ใช้
+If you are training an AI model and your system begins to thrash because the RAM is full, lowering the `batch_size` in your Python code is a common solution. How does lowering the `batch_size` help the Operating System resolve the Thrashing problem?
 
-Virtual Memory ช่วยให้โปรแกรมทำงานต่อได้เมื่อ RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM มาก จึงเป็นเพียงทางแก้เรื่องพื้นที่ ไม่ใช่ทางแก้เรื่องความเร็ว
+Answer:
+การลด `batch_size` ทำให้ข้อมูลและค่าชั่วคราวที่ต้องเก็บในแต่ละรอบมีขนาดเล็กลง RAM หรือ VRAM จึงมีโอกาสพอสำหรับโมเดลมากขึ้น ระบบไม่ต้องย้ายหน้าไปมาระหว่าง RAM กับ Disk บ่อย ๆ ทำให้ Thrashing ลดลง
 
-สำหรับงาน AI ฉันจะเริ่มจากลด batch_size ตรวจสอบการใช้ RAM/VRAM และอาจใช้ Gradient Accumulation หรือ Gradient Checkpointing แทนการปล่อยให้ระบบ Swap ตลอดเวลา เพราะ Thrashing ทำให้เวลาฝึกโมเดลเพิ่มขึ้นมาก
+Additional Summary and Application:
+
+Virtual Memory ช่วยให้โปรแกรมทำงานต่อได้เมื่อ RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM มาก สำหรับงาน AI ฉันจะเริ่มจากลด `batch_size` ตรวจสอบการใช้ RAM/VRAM และใช้เทคนิคอย่าง Gradient Accumulation หรือ Gradient Checkpointing แทนการพึ่ง OS Swap

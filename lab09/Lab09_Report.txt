@@ -1,27 +1,36 @@
 ======================================================
 COE67-222 Operating Systems - Lab 09 Report
-ชื่อ: Taofix Yayueri
-รหัสนักศึกษา: 67104000
+Name: Taofix Yayueri
+Student ID: 67104000
 ======================================================
 
-ผลที่ต้องบันทึกจาก GitHub Codespaces
-- Inode Number และ Metadata: [กรอกค่าจาก Codespace]
-- Default permissions: [กรอกค่าจาก Codespace]
-- os_security.py: ควรแสดงว่าเขียนไฟล์ไม่ได้หลังใช้ 0o400
-- ai_weight_protection.py: ควรแสดงว่า Kernel ปฏิเสธการเขียนหลังใช้ 0o444
+Observed output from GitHub Codespaces
+- Inode Number and metadata: [fill in the measured output]
+- Default permissions: [fill in the measured output]
+- `os_security.py`: the write attempt should be blocked after `0o400`
+- `ai_weight_protection.py`: the write attempt should be blocked after `0o444`
 
-1. Inodes และ Metadata
+1. Inodes and Metadata:
 
-ถ้าใช้คำสั่ง mv เปลี่ยนชื่อไฟล์ภายใน File System เดียวกัน Inode Number จะไม่เปลี่ยน เพราะการ Rename เปลี่ยนชื่อที่ชี้ไปยังไฟล์ แต่ไม่ได้สร้างข้อมูลไฟล์ใหม่ ส่วนรายละเอียดอย่างขนาด เวลา และสิทธิ์จะยังอยู่กับ Inode เดิม
+In the `inode_inspector.py` script, we printed the "Inode Number". If you rename the file using the Linux `mv` command, will the Inode Number change? Why or why not? (Hint: Think about how the OS separates the file name from the actual data).
 
-2. POSIX Permissions
+Answer:
+ถ้าเปลี่ยนชื่อไฟล์ด้วย `mv` ภายใน File System เดียวกัน Inode Number จะไม่เปลี่ยน เพราะคำสั่งนี้เปลี่ยนชื่อที่ชี้ไปยังไฟล์ แต่ไม่ได้สร้างข้อมูลไฟล์ใหม่ รายละเอียดอย่างขนาด เวลา และสิทธิ์ยังอยู่กับ Inode เดิม
 
-ค่าที่ใช้คือ 750 เพราะ Owner ได้ Read/Write/Execute เท่ากับ 7, Group ได้ Read/Execute เท่ากับ 5 และ Others ไม่มีสิทธิ์เท่ากับ 0
+2. POSIX Permissions:
 
-3. การป้องกัน Model Weights
+If you want to set a file's permission so that the Owner has Read/Write/Execute (7), the Group has Read/Execute (5), and Others have absolutely no access (0), what would be the 3-digit octal number you pass into `os.chmod()`?
 
-OS-level permission ป้องกันตั้งแต่ตอนโปรเซสขอเปิดไฟล์ ไม่ได้ขึ้นอยู่กับว่าโปรแกรมเขียน try-except ไว้ดีแค่ไหน หากใช้ os.chmod(0o444) ไฟล์จะอ่านได้แต่เขียนไม่ได้ตามสิทธิ์ที่ Kernel บังคับใช้ โปรแกรมที่เปิดไฟล์ในโหมดเขียนจึงถูกปฏิเสธก่อนแก้ข้อมูลจริง
+Answer:
+ค่าที่ใช้คือ `750` เพราะ Owner ได้ 7, Group ได้ 5 และ Others ได้ 0
 
-4. สรุปและการประยุกต์ใช้
+3. The AI Context:
 
-Inode เก็บ Metadata ของไฟล์ เช่น เจ้าของ ขนาด และตำแหน่งข้อมูล ส่วน Permission แบ่งสิทธิ์เป็น Owner, Group และ Others สำหรับ Model Weights ฉันจะตั้งไฟล์เป็น Read-only ด้วย os.chmod และกำหนดเจ้าของหรือกลุ่มด้วย chown เมื่อมีสิทธิ์เพียงพอ วิธีนี้ช่วยกันโปรเซสที่ไม่ควรแก้ไขไฟล์ได้ดีกว่าการตรวจสอบในโค้ดเพียงอย่างเดียว
+Why is it safer to rely on Operating System file permissions (like `os.chmod(0o444)`) to protect production model weights rather than relying solely on application-level logic or Python try-except blocks?
+
+Answer:
+Permission ของ OS ถูกตรวจตั้งแต่ตอนโปรเซสขอเปิดไฟล์และถูกบังคับใช้โดย Kernel ดังนั้นโปรแกรมที่พยายามเปิดไฟล์ในโหมดเขียนจะถูกปฏิเสธ แม้โค้ดแอปพลิเคชันจะเขียนเงื่อนไขป้องกันไว้ไม่ครบก็ตาม
+
+Additional Summary and Application:
+
+Inode เก็บ Metadata ของไฟล์ เช่น เจ้าของ ขนาด และตำแหน่งข้อมูล ส่วน Permission แบ่งสิทธิ์เป็น Owner, Group และ Others สำหรับ Model Weights ฉันจะใช้ `os.chmod` ให้เป็น Read-only และใช้ `chown` กำหนดเจ้าของหรือกลุ่มเมื่อมีสิทธิ์ วิธีนี้ป้องกันโปรเซสที่ไม่ควรแก้ไขไฟล์ได้ดีกว่าการตรวจสอบในโค้ดเพียงอย่างเดียว

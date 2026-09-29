@@ -1,29 +1,38 @@
 ======================================================
 COE67-222 Operating Systems - Lab 07 Report
-ชื่อ: Taofix Yayueri
-รหัสนักศึกษา: 67104000
+Name: Taofix Yayueri
+Student ID: 67104000
 ======================================================
 
-ผลจากชุดงานในสคริปต์
+Observed output from the sample process set
 - FCFS Average Waiting Time: 7.33 time units
 - FCFS Average Turnaround Time: 12.33 time units
 - Round Robin Average Waiting Time: 4.33 time units
 - Round Robin Average Turnaround Time: 10.00 time units
 
-1. Convoy Effect
+1. The Convoy Effect (Phase 2):
 
-ใน FCFS P1 ใช้ CPU นาน 10 หน่วยเวลา จึงทำให้ P2 ต้องรอจนถึงเวลา 10 และ P3 ต้องรอจนถึงเวลา 12 แม้ทั้งสองงานจะสั้นมากก็ตาม อาการที่งานสั้นหลายงานต้องต่อแถวยาวหลังงานใหญ่แบบนี้คือ Convoy Effect
+In the FCFS output of `cpu_scheduler.py`, what is the "Convoy Effect"? How did the presence of Process P1 affect the waiting times of P2 and P3?
 
-2. การเลือก Time Quantum
+Answer:
+ใน FCFS P1 ใช้ CPU นาน 10 หน่วยเวลา ทำให้ P2 ต้องรอจนถึงเวลา 10 และ P3 ต้องรอจนถึงเวลา 12 แม้ทั้งสองงานจะสั้นมาก อาการที่งานสั้นต้องต่อแถวยาวหลังงานใหญ่คือ Convoy Effect
 
-ถ้า Time Quantum ใหญ่มาก เช่น 100 งานแรกจะได้ใช้ CPU จนเกือบจบก่อนส่งต่อ งานจึงมีพฤติกรรมใกล้เคียง FCFS
+2. Choosing the Time Quantum:
 
-ถ้า Time Quantum เล็กมาก เช่น 0.0001 ระบบจะสลับงานถี่เกินไป เวลาและ CPU ที่ใช้ในการ Context Switch จะมีสัดส่วนสูง ทำให้เวลาส่วนหนึ่งไม่ได้ใช้ประมวลผลงานจริง
+In Round Robin, the Time Quantum is critical.
+- What happens if the OS sets the Time Quantum extremely large (e.g., Quantum = 100)? Which algorithm does RR start to behave like?
+- What happens if the OS sets the Time Quantum extremely small (e.g., Quantum = 0.0001)? (Hint: Think about Context Switching overhead.)
 
-3. การประยุกต์กับ AI Inference
+Answer:
+ถ้า Quantum ใหญ่มาก งานแรกจะได้ใช้ CPU จนเกือบจบก่อนส่งต่อ จึงมีพฤติกรรมใกล้เคียง FCFS ถ้า Quantum เล็กมาก ระบบจะสลับงานถี่เกินไป ทำให้เสียเวลาไปกับ Context Switching มากจนการประมวลผลจริงช้าลง
 
-ในแบบ Round Robin เซิร์ฟเวอร์ให้แต่ละคำขอสร้าง Token ทีละช่วงสั้น ๆ แล้วนำงานที่ยังไม่เสร็จกลับเข้าคิว ดังนั้นคำขอสั้นของ User B ไม่ต้องรอให้บทความของ User A สร้างครบทั้งหมด User B จึงได้รับ Token แรกเร็วขึ้นและรู้สึกว่าระบบตอบสนองดีขึ้น ค่า TTFT ก็ลดลง
+3. AI Context:
 
-4. สรุปและการประยุกต์ใช้
+In Phase 3, we used a Round Robin approach for generating tokens in an LLM. Explain why iteration-level Round Robin scheduling prevents long user queries from starving short queries, and how it improves perceived latency (Time To First Token / TTFT) for interactive AI applications.
 
-FCFS เข้าใจง่าย แต่ถ้างานแรกใหญ่ งานเล็กที่มาทีหลังจะรอนาน Round Robin แบ่งเวลาให้ทุกงานเป็นช่วง ๆ จึงเหมาะกับ AI Inference API ที่มีผู้ใช้พร้อมกันจำนวนมากกว่า เพราะลดการถูกงานยาวงานเดียวขวางคิวทั้งหมด
+Answer:
+ระบบแบ่งการสร้าง Token ของแต่ละคำขอเป็นช่วงสั้น ๆ แล้วนำงานที่ยังไม่เสร็จกลับเข้าคิว User B จึงไม่ต้องรอให้คำตอบยาวของ User A สร้างครบก่อน ทำให้ได้ Token แรกเร็วขึ้นและรู้สึกว่าระบบตอบสนองดีขึ้น ค่า TTFT จึงลดลง
+
+Additional Summary and Application:
+
+FCFS เข้าใจง่าย แต่ถ้างานแรกใหญ่ งานเล็กที่มาทีหลังจะรอนาน Round Robin แบ่งเวลาให้ทุกงาน จึงเหมาะกับ AI Inference API ที่มีผู้ใช้พร้อมกันจำนวนมากกว่าและลดการถูกงานยาวงานเดียวขวางคิวทั้งหมด
