@@ -16,24 +16,24 @@ Observed output from GitHub Codespaces
 In the `page_replacement.py` script, why did the LRU algorithm perform better (have fewer page faults) than the FIFO algorithm for the given reference string? Explain how LRU decides which page to evict.
 
 Answer:
-จากผลการทดลอง FIFO เกิด Page Fault 9 ครั้ง ส่วน LRU เกิด 7 ครั้ง LRU จึงดีกว่า 2 ครั้ง เพราะมันดูประวัติการใช้งานล่าสุด เมื่อ RAM เต็ม LRU จะนำหน้าที่ไม่ได้ถูกใช้นานที่สุดออก ทำให้หน้าที่เพิ่งถูกใช้งานยังอยู่ใน RAM ต่อ
+จากที่ลองรัน FIFO เกิด Page Fault 9 ครั้ง ส่วน LRU เกิด 7 ครั้ง พูดง่าย ๆ คือ LRU จำได้ว่าหน้าไหนเพิ่งถูกใช้ แล้วพยายามเก็บหน้านั้นไว้ เมื่อ RAM เต็มก็เอาหน้าที่ไม่ได้ถูกใช้นานที่สุดออก
 
-FIFO ดูแค่ว่าหน้าไหนเข้ามาก่อน จึงอาจนำหน้าที่กำลังจะถูกใช้อีกครั้งออกไป แม้หน้านั้นจะยังมีประโยชน์กับโปรแกรมอยู่
+ส่วน FIFO ดูแค่ว่าหน้าไหนเข้ามาก่อน เลยมีโอกาสเอาหน้าที่กำลังจะถูกใช้ซ้ำออกไป ทั้งที่โปรแกรมยังต้องใช้หน้านั้นอยู่
 
 2. Understanding Thrashing (Phase 3):
 
 Based on your observation of `ai_thrashing.py`, define "Thrashing" in your own words. Why is the processing time significantly higher in Scenario 2?
 
 Answer:
-ฉันเข้าใจว่า Thrashing คือภาวะที่ระบบเสียเวลาไปกับการย้ายข้อมูลระหว่าง RAM กับ Disk มากกว่าการประมวลผลจริง Scenario 2 ต้องเปิด อ่าน และเขียนไฟล์ซ้ำหลายรอบ ขณะที่ Scenario 1 เข้าถึงข้อมูลใน RAM โดยตรง จึงทำให้ Scenario 2 ใช้เวลามากกว่า
+สำหรับฉัน Thrashing คือช่วงที่คอมพิวเตอร์มัวแต่ย้ายข้อมูลไปมาระหว่าง RAM กับ Disk จนแทบไม่ได้ทำงานจริง Scenario 2 ต้องเปิด อ่าน และเขียนไฟล์ซ้ำหลายรอบ แต่ Scenario 1 อ่านข้อมูลจาก RAM โดยตรง เลยทำงานได้เร็วกว่า
 
 3. AI Engineering Decision:
 
 If you are training an AI model and your system begins to thrash because the RAM is full, lowering the `batch_size` in your Python code is a common solution. How does lowering the `batch_size` help the Operating System resolve the Thrashing problem?
 
 Answer:
-การลด `batch_size` ทำให้ข้อมูลและค่าชั่วคราวที่ต้องเก็บในแต่ละรอบมีขนาดเล็กลง RAM หรือ VRAM จึงมีโอกาสพอสำหรับโมเดลมากขึ้น ระบบไม่ต้องย้ายหน้าไปมาระหว่าง RAM กับ Disk บ่อย ๆ ทำให้ Thrashing ลดลง
+พอลด `batch_size` ข้อมูลที่ต้องเก็บในแต่ละรอบก็เล็กลง RAM หรือ VRAM เลยมีโอกาสพอมากขึ้น ระบบไม่ต้องย้ายข้อมูลไปมาระหว่าง RAM กับ Disk บ่อย ๆ ปัญหา Thrashing ก็ลดลง
 
 Additional Summary and Application:
 
-Virtual Memory ช่วยให้โปรแกรมทำงานต่อได้เมื่อ RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM มาก สำหรับงาน AI ฉันจะเริ่มจากลด `batch_size` ตรวจสอบการใช้ RAM/VRAM และใช้เทคนิคอย่าง Gradient Accumulation หรือ Gradient Checkpointing แทนการพึ่ง OS Swap
+Virtual Memory ช่วยให้โปรแกรมยังทำงานต่อได้ตอน RAM ไม่พอ โดยย้ายบางหน้าไปไว้บน Disk แต่ Disk ช้ากว่า RAM เยอะ สำหรับงาน AI ฉันจะเริ่มจากลด `batch_size` ดูการใช้ RAM/VRAM และอาจใช้ Gradient Accumulation หรือ Gradient Checkpointing แทนการปล่อยให้ระบบ Swap ตลอดเวลา

@@ -15,7 +15,7 @@ Observed output from the sample process set
 In the FCFS output of `cpu_scheduler.py`, what is the "Convoy Effect"? How did the presence of Process P1 affect the waiting times of P2 and P3?
 
 Answer:
-ใน FCFS P1 ใช้ CPU นาน 10 หน่วยเวลา ทำให้ P2 ต้องรอจนถึงเวลา 10 และ P3 ต้องรอจนถึงเวลา 12 แม้ทั้งสองงานจะสั้นมาก อาการที่งานสั้นต้องต่อแถวยาวหลังงานใหญ่คือ Convoy Effect
+ใน FCFS P1 กินเวลา CPU ไป 10 หน่วย ทำให้ P2 ต้องรอถึงเวลา 10 และ P3 ต้องรอถึงเวลา 12 ทั้งที่สองงานนี้สั้นมาก อาการที่งานเล็กต้องไปต่อคิวยาวหลังงานใหญ่ก็คือ Convoy Effect
 
 2. Choosing the Time Quantum:
 
@@ -24,15 +24,15 @@ In Round Robin, the Time Quantum is critical.
 - What happens if the OS sets the Time Quantum extremely small (e.g., Quantum = 0.0001)? (Hint: Think about Context Switching overhead.)
 
 Answer:
-ถ้า Quantum ใหญ่มาก งานแรกจะได้ใช้ CPU จนเกือบจบก่อนส่งต่อ จึงมีพฤติกรรมใกล้เคียง FCFS ถ้า Quantum เล็กมาก ระบบจะสลับงานถี่เกินไป ทำให้เสียเวลาไปกับ Context Switching มากจนการประมวลผลจริงช้าลง
+ถ้า Quantum ใหญ่มาก งานแรกก็จะได้ใช้ CPU ยาวจนเกือบจบ ทำให้ Round Robin แทบไม่ต่างจาก FCFS ถ้า Quantum เล็กมาก ระบบจะสลับงานไปมาถี่เกินไป เวลาส่วนหนึ่งเลยหมดไปกับ Context Switching แทนที่จะใช้ประมวลผลงาน
 
 3. AI Context:
 
 In Phase 3, we used a Round Robin approach for generating tokens in an LLM. Explain why iteration-level Round Robin scheduling prevents long user queries from starving short queries, and how it improves perceived latency (Time To First Token / TTFT) for interactive AI applications.
 
 Answer:
-ระบบแบ่งการสร้าง Token ของแต่ละคำขอเป็นช่วงสั้น ๆ แล้วนำงานที่ยังไม่เสร็จกลับเข้าคิว User B จึงไม่ต้องรอให้คำตอบยาวของ User A สร้างครบก่อน ทำให้ได้ Token แรกเร็วขึ้นและรู้สึกว่าระบบตอบสนองดีขึ้น ค่า TTFT จึงลดลง
+ระบบแบ่งการสร้าง Token ของแต่ละคำขอเป็นช่วงสั้น ๆ แล้ววนงานที่ยังไม่เสร็จกลับเข้าคิว User B เลยไม่ต้องรอให้คำตอบยาวของ User A เสร็จก่อน ทำให้ได้ Token แรกเร็วขึ้นและรู้สึกว่าระบบตอบไวกว่าเดิม ค่า TTFT ก็ลดลง
 
 Additional Summary and Application:
 
-FCFS เข้าใจง่าย แต่ถ้างานแรกใหญ่ งานเล็กที่มาทีหลังจะรอนาน Round Robin แบ่งเวลาให้ทุกงาน จึงเหมาะกับ AI Inference API ที่มีผู้ใช้พร้อมกันจำนวนมากกว่าและลดการถูกงานยาวงานเดียวขวางคิวทั้งหมด
+FCFS เข้าใจง่าย แต่ถ้างานแรกใหญ่ งานเล็กที่มาทีหลังก็ต้องรอนาน Round Robin แบ่งเวลาให้ทุกงาน จึงเหมาะกับ AI Inference API ที่มีคนใช้พร้อมกันเยอะกว่า เพราะงานยาวงานเดียวจะไม่สามารถขวางคิวทั้งหมดได้

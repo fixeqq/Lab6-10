@@ -17,22 +17,22 @@ Observed output from the sample disk requests
 Looking at the output of `disk_scheduler.py`, why did the SCAN algorithm result in a significantly lower "Total Head Movement" compared to FCFS? Explain the logic behind the Elevator behavior.
 
 Answer:
-FCFS ทำตามลำดับคำขอที่เข้ามา จึงทำให้หัวอ่านกระโดดไปมาระหว่างตำแหน่งไกล ๆ และเคลื่อนที่รวม 640 cylinders ส่วน SCAN เรียงคำขอแล้วเคลื่อนที่ไปทางเดียวจนถึงปลาย Disk ก่อนย้อนกลับ จึงลดระยะทางรวมเหลือ 331 cylinders
+FCFS ทำตามคิวเดิม ทำให้หัวอ่านกระโดดไปมาระหว่างตำแหน่งไกล ๆ และเคลื่อนที่รวม 640 cylinders ส่วน SCAN เรียงคำขอก่อน แล้วค่อยเคลื่อนที่ไปทางเดียวจนถึงปลาย Disk ก่อนย้อนกลับ เลยเหลือระยะทางรวม 331 cylinders
 
 2. I/O Bound Concept:
 
 If an Operating System is described as being "I/O Bound" during a task, what does that actually mean for the CPU? Is the CPU at 100% usage or is it mostly idle? Why?
 
 Answer:
-I/O Bound หมายถึงงานต้องรอการอ่านหรือเขียนข้อมูลเป็นหลัก CPU จึงไม่ได้ทำงานเต็ม 100% แต่มีช่วงว่างรอ Disk หรืออุปกรณ์ I/O เมื่อข้อมูลมาถึงจึงกลับมาประมวลผลต่อ
+I/O Bound คือ งานที่ต้องรออ่านหรือเขียนข้อมูลเป็นหลัก CPU เลยไม่ได้ทำงานเต็ม 100% แต่จะมีช่วงว่างรอ Disk หรืออุปกรณ์ I/O พอข้อมูลมาถึงจึงค่อยทำงานต่อ
 
 3. AI Industry Connection (Phase 3):
 
 Explain why storing an AI image dataset as 1,000,000 separate `.jpg` files causes high I/O overhead and GPU starvation compared to packing them into a single sequential binary format (e.g., TFRecord, WebDataset, or HDF5).
 
 Answer:
-ไฟล์ .jpg จำนวนมากทำให้ OS ต้องเปิดไฟล์ ตรวจ Metadata ตรวจสิทธิ์ และปิดไฟล์ซ้ำเป็นล้านครั้ง จึงมี Overhead สูงและ GPU อาจว่างรอข้อมูล หากรวมเป็น TFRecord, WebDataset หรือ HDF5 ระบบจะอ่านข้อมูลต่อเนื่องได้ง่ายกว่าและส่งข้อมูลให้ GPU ได้สม่ำเสมอขึ้น
+ไฟล์ .jpg จำนวนมากทำให้ OS ต้องเปิดไฟล์ ตรวจ Metadata ตรวจสิทธิ์ และปิดไฟล์ซ้ำเป็นล้านครั้ง งานจุกจิกพวกนี้ทำให้ Overhead สูงและ GPU อาจว่างรอข้อมูล ถ้ารวมเป็น TFRecord, WebDataset หรือ HDF5 ระบบจะอ่านข้อมูลต่อเนื่องได้ง่ายกว่า GPU ก็ได้ข้อมูลสม่ำเสมอขึ้น
 
 Additional Summary and Application:
 
-Random Access มีคอขวดจากการกระโดดไปยังตำแหน่งต่าง ๆ และการจัดการไฟล์จำนวนมาก ส่วน Sequential Access อ่านข้อมูลต่อเนื่องจึงลดงานของ OS ได้มากกว่า ถ้า Data Pipeline เป็น I/O Bound GPU จะว่างงานแม้ตัว GPU จะยังมีความสามารถเหลืออยู่
+Random Access ช้าจากการต้องกระโดดไปหลายตำแหน่งและจัดการไฟล์จำนวนมาก ส่วน Sequential Access อ่านข้อมูลต่อกันไปจึงลดงานของ OS ได้มากกว่า ถ้า Data Pipeline ติดที่ I/O GPU ก็จะว่างรอข้อมูล ทั้งที่ตัว GPU ยังทำงานได้อีก
