@@ -5,8 +5,8 @@ Student ID: 67104000
 ======================================================
 
 Observed output from GitHub Codespaces
-- Inode Number and metadata: [fill in the measured output]
-- Default permissions: [fill in the measured output]
+- Inode Number and metadata: 1456337
+- Default permissions: -rw-rw-rw-
 - `os_security.py`: the write attempt should be blocked after `0o400`
 - `ai_weight_protection.py`: the write attempt should be blocked after `0o444`
 
@@ -15,22 +15,22 @@ Observed output from GitHub Codespaces
 In the `inode_inspector.py` script, we printed the "Inode Number". If you rename the file using the Linux `mv` command, will the Inode Number change? Why or why not? (Hint: Think about how the OS separates the file name from the actual data).
 
 Answer:
-ถ้าใช้ mv เปลี่ยนชื่อไฟล์ใน File System เดิม Inode Number จะไม่เปลี่ยน เพราะเราแค่เปลี่ยนชื่อที่ชี้ไปยังไฟล์ ไม่ได้สร้างไฟล์ใหม่ ขนาด เวลา และสิทธิ์ต่าง ๆ ยังอยู่กับ Inode เดิม
+ถ้าเปลี่ยนชื่อไฟล์ด้วย `mv` ภายใน File System เดียวกัน Inode Number จะไม่เปลี่ยน เพราะคำสั่งนี้เปลี่ยนชื่อที่ชี้ไปยังไฟล์ แต่ไม่ได้สร้างข้อมูลไฟล์ใหม่ รายละเอียดอย่างขนาด เวลา และสิทธิ์ยังอยู่กับ Inode เดิม
 
 2. POSIX Permissions:
 
 If you want to set a file's permission so that the Owner has Read/Write/Execute (7), the Group has Read/Execute (5), and Others have absolutely no access (0), what would be the 3-digit octal number you pass into `os.chmod()`?
 
 Answer:
-ค่าคือ 750 เพราะ Owner ได้ 7, Group ได้ 5 และ Others ได้ 0
+ค่าที่ใช้คือ `750` เพราะ Owner ได้ 7, Group ได้ 5 และ Others ได้ 0
 
 3. The AI Context:
 
 Why is it safer to rely on Operating System file permissions (like `os.chmod(0o444)`) to protect production model weights rather than relying solely on application-level logic or Python try-except blocks?
 
 Answer:
-Permission ของ OS ถูกตรวจตั้งแต่ตอนโปรเซสขอเปิดไฟล์ และ Kernel เป็นคนบังคับใช้ ดังนั้นถ้าโปรแกรมพยายามเปิดไฟล์แบบเขียนก็จะถูกปฏิเสธ ถึงในโค้ดแอปจะลืมใส่เงื่อนไขป้องกันไว้ก็ตาม
+Permission ของ OS ถูกตรวจตั้งแต่ตอนโปรเซสขอเปิดไฟล์และถูกบังคับใช้โดย Kernel ดังนั้นโปรแกรมที่พยายามเปิดไฟล์ในโหมดเขียนจะถูกปฏิเสธ แม้โค้ดแอปพลิเคชันจะเขียนเงื่อนไขป้องกันไว้ไม่ครบก็ตาม
 
 Additional Summary and Application:
 
-Inode เก็บ Metadata ของไฟล์ เช่น เจ้าของ ขนาด และตำแหน่งข้อมูล ส่วน Permission แบ่งสิทธิ์เป็น Owner, Group และ Others ถ้าเป็น Model Weights ฉันจะใช้ os.chmod ให้เป็น Read-only และใช้ chown กำหนดเจ้าของหรือกลุ่มเมื่อมีสิทธิ์ วิธีนี้กันโปรเซสที่ไม่ควรแก้ไฟล์ได้ดีกว่าตรวจสอบในโค้ดอย่างเดียว
+Inode เก็บ Metadata ของไฟล์ เช่น เจ้าของ ขนาด และตำแหน่งข้อมูล ส่วน Permission แบ่งสิทธิ์เป็น Owner, Group และ Others สำหรับ Model Weights ฉันจะใช้ `os.chmod` ให้เป็น Read-only และใช้ `chown` กำหนดเจ้าของหรือกลุ่มเมื่อมีสิทธิ์ วิธีนี้ป้องกันโปรเซสที่ไม่ควรแก้ไขไฟล์ได้ดีกว่าการตรวจสอบในโค้ดเพียงอย่างเดียว

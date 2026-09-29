@@ -9,7 +9,7 @@ Observed output from the Live Dashboard
 - Workload B: 16 GB RAM and CPU only
 - Workload C: 2 GB RAM and GPU 3
 - Workload D: rejected because `secret_keys.txt` was not found
-- Dashboard screenshot: [add after running in Codespaces]
+- Dashboard screenshot: lab10/image.png
 
 1. The Role of the Operating System:
 
@@ -20,26 +20,26 @@ Match the specific code behavior in `ultimate_cluster_os.py` to the correspondin
 [Explain which line of code simulated this and why Workload D failed]
 
 Answer:
-โค้ดใช้ os.path.exists(dataset_path) เช็กไฟล์ก่อนเริ่มงาน Workload D ขอใช้ secret_keys.txt แต่ไฟล์นี้ไม่มีอยู่ จึงถูกปฏิเสธและไม่ได้รับทรัพยากรต่อ
+โค้ดใช้ `os.path.exists(dataset_path)` ตรวจไฟล์ก่อนเริ่มงาน Workload D ขอใช้ `secret_keys.txt` ซึ่งไม่มีอยู่ในระบบ จึงถูกปฏิเสธและไม่ได้รับทรัพยากรต่อ
 
 - Memory Management (Labs 5/6):
 [Explain how the OS prevented Thrashing by using the `while` loop for RAM allocation]
 
 Answer:
-while loop คอยเช็ก available_ram_gb ก่อนจะแบ่ง RAM ให้แต่ละงาน ถ้ายังไม่พอ งานก็รอไปก่อน ไม่ฝืนรันจนใช้ RAM เกินและเกิด Thrashing
+`while` loop ตรวจ `available_ram_gb` ก่อนหัก RAM ให้แต่ละงาน ถ้ายังมีไม่พอ งานจะรอแทนการฝืนรัน วิธีนี้ช่วยไม่ให้ใช้ RAM เกินจริงจนเกิด Thrashing
 
 - Concurrency & Deadlocks (Labs 3/4):
 [Explain how the OS sorted the requested GPUs to avoid Circular Wait deadlocks]
 
 Answer:
-โค้ดใช้ sorted(req_gpus) ทำให้ทุกงานขอ GPU ตามลำดับเดียวกัน จึงลดโอกาสที่งานหนึ่งถือ GPU บางตัวไว้แล้วไปรอ GPU ของอีกงาน ซึ่งจะทำให้เกิด Circular Wait
+โค้ดใช้ `sorted(req_gpus)` ทำให้ทุกงานขอ GPU ตามลำดับเดียวกัน ลดโอกาสที่แต่ละงานจะถือ GPU บางตัวแล้วรอ GPU ของอีกงาน ซึ่งเป็นสาเหตุของ Circular Wait
 
 2. Hardware Utilization:
 
 Look at the output of your Live Dashboard. Explain how the OS successfully ran Workload A (LLaMA Training), Workload B (Preprocessing), and Workload C (Inference) AT THE SAME TIME without crashing. Why didn't they block each other?
 
 Answer:
-Workload A ใช้ GPU 0, 1, 2 และ RAM 40 GB ส่วน Workload B ไม่ใช้ GPU จึงทำงานบน CPU พร้อมกับ A ได้ Workload C ใช้ GPU 3 ที่ยังว่างและ RAM 2 GB แต่ละงานใช้ทรัพยากรที่ไม่ชนกันหรือมี Lock คุมอยู่ จึงไม่แย่งกันจนระบบล้ม
+Workload A ใช้ GPU 0, 1, 2 และ RAM 40 GB ส่วน Workload B ไม่ใช้ GPU จึงทำงานบน CPU ควบคู่กับ A ได้ ขณะที่ Workload C ใช้ GPU 3 ที่ยังว่างและ RAM 2 GB แต่ละงานใช้ทรัพยากรคนละส่วนหรืออยู่ภายใต้ Lock จึงไม่แย่งทรัพยากรกันจนระบบล้ม
 
 3. Course Reflection (AI Engineering Context):
 
@@ -47,8 +47,8 @@ You are now applying for a role as a Machine Learning Operations (MLOps) Enginee
 Write a short paragraph explaining how understanding Operating Systems (Process queues, RAM/Virtual Memory limits, Deadlock avoidance, File systems) gives you an advantage over a programmer who only knows how to write basic Python/PyTorch scripts.
 
 Answer:
-ความรู้เรื่อง OS ทำให้ฉันพอเดาได้ว่าระบบติดตรงไหนตอนรันจริง เช่น RAM, CPU Queue, Disk หรือสิทธิ์ไฟล์ เลยช่วยวางระบบ AI/MLOps ให้ใช้ทรัพยากรคุ้ม แก้ปัญหาได้เร็ว และป้องกันข้อมูลหรือ Model Weights เสียหายได้ ไม่ใช่แค่เขียนโค้ดให้รันผ่านอย่างเดียว
+ความรู้เรื่อง OS ทำให้ฉันมองเห็นปัญหาที่เกิดตอนระบบรันจริง เช่น งานติดที่ RAM, CPU Queue, Disk หรือสิทธิ์ไฟล์ จึงวางระบบ AI/MLOps ให้ใช้ทรัพยากรคุ้มค่า แก้ปัญหาได้เร็ว และป้องกันข้อมูลหรือ Model Weights เสียหายได้ดีกว่าการเขียนโค้ดให้ทำงานได้เพียงอย่างเดียว
 
 Additional Capstone Summary:
 
-Memory Allocation ช่วยกันไม่ให้ใช้ RAM เกิน File System Security กันงานที่ไม่มีสิทธิ์เข้าถึงไฟล์ การเรียงลำดับการขอ GPU ช่วยลด Deadlock และ Job Queue ช่วยจัดงานตามทรัพยากร ทั้งสี่ส่วนจึงทำให้ Training, Preprocessing และ Inference ทำงานพร้อมกันได้โดยไม่ตีกันเอง
+Memory Allocation ป้องกันการใช้ RAM เกิน File System Security กรองไฟล์ที่เข้าถึงไม่ได้ การเรียงลำดับการขอ GPU ช่วยลด Deadlock และ Job Queue ช่วยจัดงานให้เหมาะกับทรัพยากร ทั้งสี่ส่วนทำให้ Training, Preprocessing และ Inference ทำงานพร้อมกันได้อย่างราบรื่น
