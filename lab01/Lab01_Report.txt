@@ -5,28 +5,26 @@ Student ID: 67104000
 ======================================================
 
 Observed output from GitHub Codespaces
-- OS version: Linux 6.8.0-1064-azure
-- CPU: 2 logical CPUs, AMD EPYC 7763 64-Core Processor
-- Total RAM: 7.76 GB จาก profiler.py หรือประมาณ 7.8 GiB จาก free -h
-- stress_test.py: รอผลการสังเกตจาก htop
+- profiler.py: OS version = Linux 6.8.0-1064-azure, CPU cores = 2, Total RAM = 7.76 GB
+- stress_test.py: จาก htop พบว่าโปรแกรมใช้ CPU หนักอยู่ที่ Core 0 เกือบ 100% โดยโปรเซส Python ใช้ CPU ประมาณ 99.3% ส่วน Core 1 ใช้งานประมาณ 37%
 
 1. Hardware Baseline:
 Based on lscpu and profiler.py, what is the exact OS version, number of CPU cores, and total RAM of your Codespace environment?
 
 Answer:
-Codespace ใช้ Linux kernel 6.8.0-1064-azure มี CPU แบบ logical 2 ตัว และมี RAM ทั้งหมดประมาณ 7.76 GB ค่าใน profiler.py ตรงกับข้อมูลจาก lscpu และ free -h
+Codespace ใช้ Linux kernel 6.8.0-1064-azure มี CPU แบบ logical 2 ตัว และมี RAM ทั้งหมด 7.76 GB ผลจาก profiler.py ตรงกับข้อมูลที่ดูจาก lscpu และ free -h
 
 2. Observation:
 During the CPU stress test (Phase 4), did your Python script utilize 100% of ALL available CPU cores, or just one? Explain what you saw in htop.
 
 Answer:
-จาก htop โปรแกรมใช้ CPU หลักอยู่ประมาณหนึ่ง core ใกล้ 100% แต่ไม่ได้ใช้ทุก core พร้อมกัน หลังจากหยุดโปรแกรม การใช้ CPU ก็ลดลงทันที แสดงว่า OS คืนทรัพยากรให้โปรเซสอื่นได้ตามปกติ
+จาก htop เห็นว่าโปรแกรมใช้ CPU หนักอยู่ที่ Core 0 เกือบ 100% โดยโปรเซส Python ใช้ CPU ประมาณ 99.3% ส่วน Core 1 ใช้งานประมาณ 37% จึงเห็นได้ว่าโปรแกรมไม่ได้กระจายงานไปใช้ทุก core อย่างเต็มที่ เพราะโค้ดทำงานแบบ thread เดียว
 
 3. Analysis:
 In the context of Machine Learning, if you have a dataset of 500,000 images, why is it crucial to know your OS memory limits and CPU core counts before writing the training code?
 
 Answer:
-ถ้าไม่รู้ข้อจำกัดของ RAM อาจโหลดรูปเข้าไปพร้อมกันมากเกินจนเครื่องช้าหรือเกิดการใช้พื้นที่ swap ส่วนจำนวน CPU cores ช่วยให้วางแผนการเตรียมข้อมูลได้เหมาะสม เช่น แบ่งงานเป็นหลายโปรเซสหรือกำหนดจำนวน worker ไม่ให้แย่งทรัพยากรกันเกินไป
+ถ้ามี dataset 500,000 รูป แล้วโหลดทั้งหมดเข้า RAM พร้อมกัน หน่วยความจำอาจไม่พอและทำให้ระบบช้าลงหรือ OS ต้องหยุดบางโปรเซส การรู้ขนาด RAM ช่วยให้แบ่งข้อมูลเป็นชุดเล็ก ๆ ได้ ส่วนจำนวน CPU cores ช่วยวางแผนการเตรียมข้อมูลและกำหนดจำนวน worker ให้เหมาะกับเครื่อง
 
 Additional Summary:
 Lab นี้ทำให้เห็นว่าโค้ด Python ต้องพึ่งทรัพยากรที่ OS จัดสรรให้ การดูข้อมูลจาก lscpu, free และ htop ช่วยให้รู้ข้อจำกัดของเครื่องก่อนเริ่มงาน ML ขนาดใหญ่
