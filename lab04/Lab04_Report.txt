@@ -8,8 +8,8 @@ Observed output from GitHub Codespaces
 - deadlock_simulation.py: Model A ถือ GPU 0 แล้วรอ GPU 1 ขณะที่ Model B ถือ GPU 1 แล้วรอ GPU 0 ทำให้โปรแกรมค้าง
 - deadlock_avoidance.py: ทั้งสองโมเดลขอ GPU 0 ก่อน แล้วจึงขอ GPU 1 ทำให้ทำงานจบได้
 - bankers_algorithm.py: ระบบอยู่ใน safe state และได้ลำดับ Job_1 -> Job_2 -> Job_0
-- starvation_sim.py: Greedy_Model ได้ใช้ resource มากกว่า Polite_Model อย่างชัดเจน
-- deadlock_detection.py: Watchdog ตรวจพบ deadlock แล้ว Model A ปล่อย GPU 0 ทำให้ Model B ทำงานต่อได้
+- starvation_sim.py: Greedy_Model_A ได้ resource 24091 ครั้ง, Greedy_Model_B ได้ 24052 ครั้ง ส่วน Polite_Model ได้ 297 ครั้ง
+- deadlock_detection.py: Watchdog ตรวจพบ deadlock แล้ว Model A ปล่อย GPU 0 ทำให้ Model B ทำงานต่อและจบงานได้
 
 1. The Deadlock (Phase 2):
 In the `deadlock_simulation.py` script, explain step-by-step how the Circular Wait condition occurred between Model A and Model B.
