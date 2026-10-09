@@ -1,0 +1,37 @@
+======================================================
+COE67-222 Operating Systems - Lab 03 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed output from GitHub Codespaces
+- race_condition.py: Expected Weight Value = 200 แต่ Actual Value มักต่ำกว่า 200 และอาจต่างกันในแต่ละรอบ
+- ipc_pipe.py: Trainer รอข้อมูลจาก DataLoader แล้วได้รับ Image_Tensor_Batch_01 ผ่าน pipe
+- producer_consumer.py: Producer โหลดข้อมูลลง buffer และ Consumer ดึงไป train โดยไม่มีการอ่านช่องว่างหรือเขียนทับข้อมูลที่ยังไม่ถูกใช้
+
+1. The Race Condition (Phase 2):
+In the `race_condition.py` script, what exactly causes the final weight to be less than the expected value? Explain the role of the OS Scheduler in this error.
+
+Answer:
+ปัญหาเกิดจากการเพิ่มค่าไม่ได้ทำในคำสั่งเดียว แต่แบ่งเป็นอ่านค่าเดิม แล้วบวกหนึ่ง และเขียนค่ากลับ ถ้า Thread หนึ่งอ่านค่าแล้วถูก OS Scheduler สลับไปให้อีก Thread อ่านค่าค่าเดิม อีก Thread จะเขียนค่าทับกลับมา ทำให้การเพิ่มบางรอบหายไป จึงได้ค่าต่ำกว่า 200
+
+2. Mutex vs. Semaphore (Phase 3):
+In `producer_consumer.py`:
+- What is the specific job of the `mutex`?
+- What is the specific job of the `empty` and `full` semaphores?
+(Why can't we just use a Mutex for everything?)
+
+Answer:
+mutex ใช้กันไม่ให้ Producer กับ Consumer เข้าแก้ buffer และ index พร้อมกัน ส่วน empty ใช้นับช่องว่างที่ยังใส่ข้อมูลได้ และ full ใช้นับจำนวนข้อมูลที่พร้อมให้ Consumer อ่าน Mutex อย่างเดียวบอกได้แค่ว่าใครเข้า critical section ได้ แต่ไม่ได้บอกว่าตอนนี้ buffer เต็มหรือว่าง จึงต้องใช้ Semaphore ช่วยควบคุมจำนวนช่องและลำดับการรอด้วย
+
+3. Deadlock Awareness:
+In the Producer function, we wrote:
+    empty.acquire()
+    mutex.acquire()
+What would happen if we swapped these two lines? (mutex first, then empty). Imagine the buffer is completely full. Explain the potential OS problem.
+
+Answer:
+ถ้า buffer เต็ม Producer จะถือ mutex แล้วไปหยุดรอ empty ทำให้ Consumer ที่ต้องใช้ mutex เพื่อเอาข้อมูลออกเข้าไม่ได้ ทั้งสองฝ่ายจึงรอกันเอง Producer รอช่องว่าง ส่วน Consumer รอ mutex สถานการณ์นี้ทำให้ pipeline ค้างแบบ deadlock
+
+Additional Summary:
+Lab นี้ทำให้เห็นว่าการทำงานพร้อมกันต้องควบคุมทั้งการเข้าถึงข้อมูลและจำนวนข้อมูลใน buffer การใช้ mutex คู่กับ semaphore ช่วยให้ DataLoader กับงาน train ทำงานต่อเนื่องโดยไม่ทำข้อมูลเสียหรือรอกันไม่จบ

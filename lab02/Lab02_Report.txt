@@ -1,0 +1,31 @@
+======================================================
+COE67-222 Operating Systems - Lab 02 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed output from GitHub Codespaces
+- Sequential Time: [กรอกเวลาจาก Codespace] seconds
+- Multithreading Time: [กรอกเวลาจาก Codespace] seconds
+- Multiprocessing Time: [กรอกเวลาจาก Codespace] seconds
+- htop: Multithreading ใช้ CPU ได้ไม่เต็มทุก core ส่วน Multiprocessing กระจายงานไปหลาย core ได้ชัดเจนกว่า
+
+1. Execution Time Comparison:
+- Sequential Time: [____] seconds
+- Multithreading Time: [____] seconds
+- Multiprocessing Time: [____] seconds
+
+2. System Observation (htop):
+Explain the difference in CPU core utilization (in htop) when running the Multithreading script vs. the Multiprocessing script.
+
+Answer:
+ตอนใช้ Multithreading งานยังทำอยู่ในโปรเซสเดียวกัน จึงเห็นการใช้ CPU กระจุกอยู่ที่ core เดียวหรือสลับไปมา แต่ไม่ได้ทำงานหลาย core ได้เต็มที่ ส่วน Multiprocessing แยกงานเป็นหลายโปรเซส OS จึงส่งแต่ละโปรเซสไปทำงานบนหลาย core ได้พร้อมกัน
+
+3. Analysis (The GIL):
+Based on your results, why did Multithreading fail to make the code run faster? Why is Multiprocessing a better choice for CPU-bound tasks (like Machine Learning data augmentation) in Python?
+
+Answer:
+งานใน Lab เป็นงานคำนวณที่ใช้ CPU หนัก แต่ Python มี GIL ทำให้ในช่วงหนึ่งมี thread ที่รัน Python bytecode ได้จริงเพียงตัวเดียว การเพิ่ม thread จึงไม่ได้ช่วยมากและอาจช้าลงจากการสลับงาน ส่วน Multiprocessing ใช้โปรเซสแยกกัน แต่ละโปรเซสมี GIL ของตัวเอง จึงใช้หลาย core เพื่อแบ่งงานคำนวณได้
+
+Additional Summary:
+ผลที่เห็นคือจำนวน thread ไม่ได้แปลว่าจะใช้ CPU ได้เต็มทุก core เสมอไป ต้องเลือกวิธีให้เหมาะกับงาน โดยงานคำนวณเหมาะกับ multiprocessing มากกว่า threading ใน Python

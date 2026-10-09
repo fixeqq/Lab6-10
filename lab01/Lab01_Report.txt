@@ -1,0 +1,30 @@
+======================================================
+COE67-222 Operating Systems - Lab 01 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed output from GitHub Codespaces
+- profiler.py: OS version = [กรอกค่าจาก Codespace], CPU cores = [กรอกค่า], Total RAM = [กรอกค่า] GB
+- stress_test.py: จาก htop พบว่าโปรแกรมใช้ CPU หลักอยู่ประมาณหนึ่ง core ส่วน core อื่นไม่ได้ทำงานเต็มที่
+
+1. Hardware Baseline:
+Based on lscpu and profiler.py, what is the exact OS version, number of CPU cores, and total RAM of your Codespace environment?
+
+Answer:
+ผลจาก profiler.py และคำสั่ง lscpu ให้ข้อมูลตรงกัน โดยต้องกรอก OS version, จำนวน CPU cores และ Total RAM ตามค่าที่แสดงใน Codespace ของฉัน
+
+2. Observation:
+During the CPU stress test (Phase 4), did your Python script utilize 100% of ALL available CPU cores, or just one? Explain what you saw in htop.
+
+Answer:
+จาก htop โปรแกรมใช้ CPU หลักอยู่ประมาณหนึ่ง core ใกล้ 100% แต่ไม่ได้ใช้ทุก core พร้อมกัน หลังจากหยุดโปรแกรม การใช้ CPU ก็ลดลงทันที แสดงว่า OS คืนทรัพยากรให้โปรเซสอื่นได้ตามปกติ
+
+3. Analysis:
+In the context of Machine Learning, if you have a dataset of 500,000 images, why is it crucial to know your OS memory limits and CPU core counts before writing the training code?
+
+Answer:
+ถ้าไม่รู้ข้อจำกัดของ RAM อาจโหลดรูปเข้าไปพร้อมกันมากเกินจนเครื่องช้าหรือเกิดการใช้พื้นที่ swap ส่วนจำนวน CPU cores ช่วยให้วางแผนการเตรียมข้อมูลได้เหมาะสม เช่น แบ่งงานเป็นหลายโปรเซสหรือกำหนดจำนวน worker ไม่ให้แย่งทรัพยากรกันเกินไป
+
+Additional Summary:
+Lab นี้ทำให้เห็นว่าโค้ด Python ต้องพึ่งทรัพยากรที่ OS จัดสรรให้ การดูข้อมูลจาก lscpu, free และ htop ช่วยให้รู้ข้อจำกัดของเครื่องก่อนเริ่มงาน ML ขนาดใหญ่

@@ -1,0 +1,42 @@
+======================================================
+COE67-222 Operating Systems - Lab 04 Report
+Name: Taofix Yayueri
+Student ID: 67104000
+======================================================
+
+Observed output from GitHub Codespaces
+- deadlock_simulation.py: Model A ถือ GPU 0 แล้วรอ GPU 1 ขณะที่ Model B ถือ GPU 1 แล้วรอ GPU 0 ทำให้โปรแกรมค้าง
+- deadlock_avoidance.py: ทั้งสองโมเดลขอ GPU 0 ก่อน แล้วจึงขอ GPU 1 ทำให้ทำงานจบได้
+- bankers_algorithm.py: ระบบอยู่ใน safe state และได้ลำดับ Job_1 -> Job_2 -> Job_0
+- starvation_sim.py: Greedy_Model ได้ใช้ resource มากกว่า Polite_Model อย่างชัดเจน
+- deadlock_detection.py: Watchdog ตรวจพบ deadlock แล้ว Model A ปล่อย GPU 0 ทำให้ Model B ทำงานต่อได้
+
+1. The Deadlock (Phase 2):
+In the `deadlock_simulation.py` script, explain step-by-step how the Circular Wait condition occurred between Model A and Model B.
+
+Answer:
+Model A ขอและถือ GPU 0 ไว้ก่อน แล้วรอ GPU 1 ส่วน Model B ขอและถือ GPU 1 ไว้ก่อน แล้วรอ GPU 0 ทั้งสองตัวจึงถือ resource ที่อีกฝ่ายต้องการอยู่ ทำให้ไม่มีตัวไหนไปต่อหรือปล่อย resource ได้ เกิดเป็น Circular Wait และโปรแกรมค้าง
+
+2. The Solution (Phase 3):
+By changing the code in `deadlock_avoidance.py` so that Model B also requests GPU 0 first, how did this specifically break the Circular Wait condition?
+
+Answer:
+เมื่อทั้ง Model A และ Model B ขอ GPU 0 ก่อน ลำดับการขอ resource จะเหมือนกัน Model หนึ่งจะได้ GPU 0 และขอ GPU 1 จนทำงานเสร็จก่อน อีกตัวจึงค่อยได้ resource ต่อ ไม่มีกรณีที่แต่ละตัวถือ GPU คนละตัวแล้วรอกัน จึงตัด Circular Wait ออกไป
+
+3. Starvation vs Deadlock (Phase 4):
+Based on the results from `starvation_sim.py`:
+- How is the final output of the Starvation script fundamentally different from the Deadlock script you ran in Phase 2?
+- In your own words, explain how a process scheduler could use a technique called Aging to help the `Polite_Model` get a fair share of CPU time.
+
+Answer:
+Deadlock ทำให้ทั้งสองงานค้างและไม่มีงานไหนทำต่อได้ ส่วน Starvation ระบบยังทำงานอยู่ แต่ Polite_Model ได้ใช้ resource น้อยกว่าเพราะ Greedy_Model ขอซ้ำบ่อยกว่า Scheduler สามารถใช้ Aging โดยค่อย ๆ เพิ่ม priority ให้โปรเซสที่รอนาน เมื่อ priority สูงพอ Polite_Model ก็จะได้คิวทำงาน ไม่ถูกแย่งตลอดเวลา
+
+4. Deadlock Detection & Recovery (Phase 3.3):
+- How did the `timeout` parameter simulate the Deadlock Detection mechanism of an Operating System?
+- When the Deadlock was detected, what exact step did Model A take to perform Recovery and allow the rest of the system to continue?
+
+Answer:
+timeout กำหนดเวลาสูงสุดที่ Model A จะรอ GPU 1 ถ้าเกินเวลานี้แสดงว่างานไม่มีความคืบหน้าและอาจติด deadlock จากนั้น Model A ปล่อย GPU 0 ที่ตัวเองถืออยู่ เพื่อให้ Model B ที่รอ GPU 0 ได้ resource ไปทำงานต่อ ระบบจึงไม่ค้างทั้งระบบ
+
+Additional Summary:
+Lab นี้ทำให้เห็นว่าการจัดลำดับการขอ resource ช่วยป้องกัน deadlock ได้ตั้งแต่ต้น แต่ถ้าควบคุมลำดับไม่ได้ OS ยังต้องตรวจจับการรอนานและทำ recovery รวมถึงดูแลความเป็นธรรมเพื่อไม่ให้บางงาน starvation
