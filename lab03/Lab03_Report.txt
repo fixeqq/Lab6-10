@@ -5,9 +5,9 @@ Student ID: 67104000
 ======================================================
 
 Observed output from GitHub Codespaces
-- race_condition.py: Expected Weight Value = 200 แต่ Actual Value มักต่ำกว่า 200 และอาจต่างกันในแต่ละรอบ
-- ipc_pipe.py: Trainer รอข้อมูลจาก DataLoader แล้วได้รับ Image_Tensor_Batch_01 ผ่าน pipe
-- producer_consumer.py: Producer โหลดข้อมูลลง buffer และ Consumer ดึงไป train โดยไม่มีการอ่านช่องว่างหรือเขียนทับข้อมูลที่ยังไม่ถูกใช้
+- race_condition.py: Expected Weight Value = 200 แต่ Actual Weight Value = 100 จึงพบ Race Condition
+- ipc_pipe.py: Trainer รอข้อมูลจาก DataLoader แล้วได้รับ Image_Tensor_Batch_01 ผ่าน pipe สำเร็จ
+- producer_consumer.py: Producer โหลด Image_Batch_0 ถึง Image_Batch_9 และ Consumer ดึงไป train ครบทุกชุด โดยไม่มีการอ่านช่องว่างหรือเขียนทับข้อมูลที่ยังไม่ถูกใช้
 
 1. The Race Condition (Phase 2):
 In the `race_condition.py` script, what exactly causes the final weight to be less than the expected value? Explain the role of the OS Scheduler in this error.
